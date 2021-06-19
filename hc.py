@@ -1,8 +1,8 @@
-from mode.mulu import mulu
-from mode.cunhuo import ping_all
+import mode.mulu
+import mode.cunhuo
 import sys
 import getopt
-import sys
+
 
 
 def help():
@@ -24,9 +24,14 @@ def help():
     print("|        -u --url                      - 设定目标url                          |")
     print("|        -t --thread                   - 设定使用的线程                       |")
     print("|        -d --dictionary               - 设定使用的字典目录                   |")
+    print("|        -p --port                     - 指定扫描的端口，用“,”隔开            |")
+    print("|                all_port              - 设定端口扫描为全端口扫描             |")
+    print("|                simple_port           - 设定端口扫描为简单端口扫描           |")
+    print("|                often_port            - 设置端口扫描为常用端口扫描           |")
     print("|    功能                                                                     |")
-    print("|        -A --Alive                    - 使用Ping来探测主机是否存活          |")
+    print("|        -A --Alive                    - 使用Ping来探测主机是否存活           |")
     print("|        -L --List                     - 扫描网站后台                         |")
+    print("|        -P --Port                     - 扫描网站端口                         |")
     print("-----------------------------------end-----------------------------------------")
 
 def main():
@@ -36,9 +41,10 @@ def main():
     ip_net = ""         # 存放IP
     url = ""            # 存放URL
     thread = 0          # 设置线程
-    CH = False          # 是否进行存货扫描
+    CH = False          # 是否进行存活扫描
     ML = False          # 是否进行目录扫描
     txt = ""            # 字典的存放目录
+    PORT = False        # 是否进行端口扫描
 
     # 读取命令行选项,若没有该选项则显示用法
     if not len(sys.argv[1:]):
@@ -46,7 +52,9 @@ def main():
     
     # 读取用户输入的参数
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hi:u:d:t:AL",["help","ip=","url=","thread=","dictionary=","Alive","List"])
+        opts, args = getopt.getopt(sys.argv[1:], 
+        "hi:u:d:t:p:PAL",
+        ["help","ip=","url=","thread=","dictionary=","Alive","List","port=","Port","all_port","simple_port","often_port"])
     except getopt.GetoptError as err:
         print(str(err))
         help()
@@ -67,16 +75,22 @@ def main():
             ML = True
         elif o in ("-d","--dictionary"):    # 如果参数为dictionary，则将用户输入的目录赋值给txt
             txt = a
+        elif o in ("-p","port"):            # 如果参数为p，则用户设置使用的端口
+            print("端口")
+        elif o in ("-P","Port"):            # 如果参数为P，则用户想进行端口扫描
+            PORT = True 
 
     # 判断用户想启用什么功能，并调用对应函数
     if len(ip_net) and CH == True:          # 开启Ping主机存活功能扫描
-        ping_all(ip_net)
-    elif len(url) and ML == True:           # 使用目录扫描
+        mode.cunhuo.ping_all(ip_net)
+    if len(url) and ML == True:           # 使用目录扫描
         if thread == 0 :
             thread = 10000                  # 用户未设置线程则默认为 10000
         if txt == "" :
             txt = "../mulu.txt"             # 用户未设置字典则使用默认字典
-        mulu(url,thread,txt)
+        mode.mulu.mulu_scan(url,thread,txt)
+    if PORT == True :
+        print()  # 功能未完善，暂时占位用
 
 
 main()

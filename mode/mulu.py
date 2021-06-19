@@ -36,7 +36,7 @@ def scan(url):
             
     end_num+=1
  
-def mulu(url,thread,txt):
+def mulu_scan(url,thread,txt):
     '''
     读取字典与开启多线程的函数
     '''
