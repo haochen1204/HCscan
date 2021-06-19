@@ -25,7 +25,8 @@ def help():
     print("|        -t --thread                   - 设定使用的线程                       |")
     print("|        -d --dictionary               - 设定使用的字典目录                   |")
     print("|    功能                                                                     |")
-    print("|        -P --Ping                     - 使用Ping来探测主机是否存活           |")
+    print("|        -A --Alive                    - 使用Ping来探测主机是否存活          |")
+    print("|        -L --List                     - 扫描网站后台                         |")
     print("|        -L --List                     - 扫描网站后台                         |")
     print("-----------------------------------end-----------------------------------------")
 
@@ -46,7 +47,7 @@ def main():
     
     # 读取用户输入的参数
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hi:u:d:t:PL",["help","ip=","url=","thread=","dictionary=","Ping","List"])
+        opts, args = getopt.getopt(sys.argv[1:], "hi:u:d:t:AL",["help","ip=","url=","thread=","dictionary=","Alive","List"])
     except getopt.GetoptError as err:
         print(str(err))
         help()
@@ -57,7 +58,7 @@ def main():
             help()
         elif o in ("-i","--ip"):            # 如果参数为ip，将用户输入的ip赋值给ip_net
             ip_net = a 
-        elif o in ("-P","--Ping"):          # 如果参数为P，开启ping功能的主机存活扫描功能
+        elif o in ("-A","--Alive"):          # 如果参数为P，开启ping功能的主机存活扫描功能
             CH = True
         elif o in ("-t","--thread"):        # 如果参数为t，则将用户设置的线程数量赋值给thread
             thread = a
