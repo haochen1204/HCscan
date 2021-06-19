@@ -3,36 +3,41 @@ import mode.cunhuo
 import sys
 import getopt
 
-
+def head():
+    print("")
+    print("      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("      |       _     _                                        |")
+    print("      |      | |   | |  ___      ___   ___  __ _  _ __       |")
+    print("      |      | |---| | / __|    / __| / __|/ _` || '_ \      |")
+    print("      |      | |---| || (__     \__ \| (__| (_| || | | |     |")
+    print("      |      |_|   |_| \___|    |___/ \___|\__,_||_| |_|     |")
+    print("      |                                                      |")
+    print("      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+    print("")
 
 def help():
     '''
     帮助展示页面
     '''
-    print("-----------------------------------hc------------------------------------------")
-    print("|                    _     _                                                  |")
-    print("|                   | |   | |  ___      ___   ___  __ _  _ __                 |")
-    print("|                   | |---| | / __|    / __| / __|/ _` || '_ \                |")
-    print("|                   | |---| || (__     \__ \| (__| (_| || | | |               |")
-    print("|                   |_|   |_| \___|    |___/ \___|\__,_||_| |_|               |")
-    print("|                                                                             |")
-    print("|++++++++++++++++++++++++++++++++使用说明+++++++++++++++++++++++++++++++++++++|")
-    print("|    参数                                                                     |")
-    print("|        -h --help                     - 输出帮助界面                         |")
-    print("|        -i --ip                       - 设定目标IP 需要参数                  |")
-    print("|                                        例如 10.10.10.10或10.10.10.10/24     |")
-    print("|        -u --url                      - 设定目标url                          |")
-    print("|        -t --thread                   - 设定使用的线程                       |")
-    print("|        -d --dictionary               - 设定使用的字典目录                   |")
-    print("|        -p --port                     - 指定扫描的端口，用“,”隔开            |")
-    print("|                all_port              - 设定端口扫描为全端口扫描             |")
-    print("|                simple_port           - 设定端口扫描为简单端口扫描           |")
-    print("|                often_port            - 设置端口扫描为常用端口扫描           |")
-    print("|    功能                                                                     |")
-    print("|        -A --Alive                    - 使用Ping来探测主机是否存活           |")
-    print("|        -L --List                     - 扫描网站后台                         |")
-    print("|        -P --Port                     - 扫描网站端口                         |")
-    print("-----------------------------------end-----------------------------------------")
+    print("")
+    print("                          【使用说明】")
+    print("    【参数】")
+    print("        -h --help                     - 输出帮助界面")
+    print("        -i --ip                       - 设定目标IP 需要参数")
+    print("                                        例如 10.10.10.10或10.10.10.10/24")
+    print("        -u --url                      - 设定目标url")
+    print("        -t --thread                   - 设定使用的线程")
+    print("        -d --dictionary               - 设定使用的字典目录")
+    print("        -p --port                     - 指定扫描的端口，用“,”隔开。提供了3种扫描方式，默认为常用端口")
+    print("                all_port              - 设定端口扫描为全端口扫描")
+    print("                simple_port           - 设定端口扫描为简单端口扫描")
+    print("                often_port            - 设置端口扫描为常用端口扫描")
+    print("    【功能】")
+    print("        -A --Alive                    - 使用Ping来探测主机是否存活")
+    print("        -L --List                     - 扫描网站后台")
+    print("        -P --Port                     - 扫描网站端口，可以用-p来进行指定，不指定默认为常用端口")
+    print("           --AUTO                     - 根据输入的IP自动进行所有功能的监测")
+    print("")
 
 def main():
     '''
@@ -57,11 +62,13 @@ def main():
         ["help","ip=","url=","thread=","dictionary=","Alive","List","port=","Port","all_port","simple_port","often_port"])
     except getopt.GetoptError as err:
         print(str(err))
+        head()
         help()
 
     # 从opts中读取数据，o为参数,a为参数后带的值
     for o,a in opts:
         if o in ("-h","--help"):            # 如果参数为help，展示help界面
+            head()
             help()
         elif o in ("-i","--ip"):            # 如果参数为ip，将用户输入的ip赋值给ip_net
             ip_net = a 
@@ -82,14 +89,17 @@ def main():
 
     # 判断用户想启用什么功能，并调用对应函数
     if len(ip_net) and CH == True:          # 开启Ping主机存活功能扫描
+        head()
         mode.cunhuo.ping_all(ip_net)
-    if len(url) and ML == True:           # 使用目录扫描
+    if len(url) and ML == True:             # 使用目录扫描
         if thread == 0 :
             thread = 10000                  # 用户未设置线程则默认为 10000
         if txt == "" :
             txt = "../mulu.txt"             # 用户未设置字典则使用默认字典
+        head()
         mode.mulu.mulu_scan(url,thread,txt)
     if PORT == True :
+        head()
         print()  # 功能未完善，暂时占位用
 
 

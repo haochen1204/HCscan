@@ -1,4 +1,3 @@
-import sys
 import os
 import queue
 import requests
@@ -32,8 +31,7 @@ def scan(url):
             alive_num+=1
         else:                                   # 不然就打印url+状态码，并延时一秒
             print('[-] '+urls+'           <'+str(code)+'>')
-            time.sleep(1)
-            
+            time.sleep(1)  
     end_num+=1
  
 def mulu_scan(url,thread,txt):
@@ -62,7 +60,7 @@ def mulu_scan(url,thread,txt):
 
     # 循环等待所有线程执行完毕，打印执行结果 
     while(True):
-        if start_num == end_num :
+        if start_num >= end_num :
             print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束") 
             print("共扫描 ",list_num," 个目录")
             print("发现存在 ",alive_num," 个目录")
