@@ -1,5 +1,6 @@
 import mode.mulu
 import mode.cunhuo
+import mode.duankou
 import sys
 import getopt
 
@@ -50,6 +51,7 @@ def main():
     ML = False          # 是否进行目录扫描
     txt = ""            # 字典的存放目录
     PORT = False        # 是否进行端口扫描
+    use_port = ''       # 使用的端口
 
     # 读取命令行选项,若没有该选项则显示用法
     if not len(sys.argv[1:]):
@@ -84,24 +86,28 @@ def main():
         elif o in ("-d","--dictionary"):    # 如果参数为dictionary，则将用户输入的目录赋值给txt
             txt = a
         elif o in ("-p","port"):            # 如果参数为p，则用户设置使用的端口
-            print("端口")
+            use_port = a
         elif o in ("-P","Port"):            # 如果参数为P，则用户想进行端口扫描
             PORT = True 
+    
+    if thread == 0 :
+        thread = 10000                  # 用户未设置线程则默认为 10000
+    if txt == "" :
+        txt = "../mulu.txt"             # 用户未设置字典则使用默认字典
+    if len(use_port) == 0:
+        use_port = 'often_port'
 
     # 判断用户想启用什么功能，并调用对应函数
     if len(ip_net) and CH == True:          # 开启Ping主机存活功能扫描
         head()
         mode.cunhuo.ping_all(ip_net)
     if len(url) and ML == True:             # 使用目录扫描
-        if thread == 0 :
-            thread = 10000                  # 用户未设置线程则默认为 10000
-        if txt == "" :
-            txt = "../mulu.txt"             # 用户未设置字典则使用默认字典
         head()
         mode.mulu.mulu_scan(url,thread,txt)
-    if PORT == True :
+    if PORT == True:
         head()
-        print()  # 功能未完善，暂时占位用
+        mode.duankou.port_scan(ip_net,use_port,thread,3)
+
 
 
 main()

@@ -1,26 +1,53 @@
+import ipaddress
 import time
 import socket
+import threading
 
-def get_ip_by_name(domain):
-    '''
-    提供域名转ip的功能，利用socket.gethostbyname，返回str
-    在该程序中并没有被调用
-    '''
-    try:
-        '''将域名转换为IP'''
-        return socket.gethostbyname 
-    except Exception as e:
-        print("%s:%s"%(domain, e))
+result_list = list()
+scan_num = 0
+port_l = list()
+thread_num = 0
 
-def port_scan(ip, port_list, timeout):
+def port_scan(ip, port_list, thread, timeout):
     '''
     端口扫描核心代码
     '''
-    ''' START_MSG = "" '''
-    OPEN_MSG = "% 6d [OPEN]"
-    result_list = list()
+    global scan_num
+    global port_l
+    global thread_num 
 
-    for port in port_list:
+    if(port_list == 'all_port' or port_list == ''):
+        port_list = list(range(1,65536))
+    elif(port_list == 'simple_port'):
+        port_list = [80,8080]
+    elif(port_list == 'often_port'):
+        port_list = [8080,100]
+    
+    port_num = len(port_list)
+    net = ipaddress.ip_network(ip,False)
+    for i in net:
+        ip_addr = str(i)
+        j=0
+        port_l = port_list
+        while(True):
+            if(thread_num < thread):
+                t = threading.Thread(target=scan,args=(ip_addr,timeout))
+                t.start()
+                thread_num+=1
+            if(len(port_l)==0):
+                break
+            
+
+def scan(ip,timeout):
+    global result_list
+    global port_l
+    global scan_num
+    global thread_num
+    OPEN_MSG = "% 6d [OPEN]"
+
+    while(len(port_l)!=0):
+        port = port_l[0]
+        port_l.remove(port)
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(timeout)
@@ -34,17 +61,7 @@ def port_scan(ip, port_list, timeout):
             print(e)
         finally:
             s.close()
-    return result_list
+        scan_num+=1
+        thread_num-=1
 
-
-def all_port_scan(ip, start_port = 1, end_port = 65535, timeout=3):
-    '''
-    扫描所有的端口(1-65535)，返回一个包含所有开放的端口list，可以通过参数start_port和参数end_port自定义开始端口和结束端口
-    '''
-    port_list = range(start_port,end_port+1)
-    result_list =  port_scan(ip, port_list, timeout)
-    return result_list
-
-def value_port_scan(ip, port_list, timeout):
-    result_list = port_scan(ip, port_list, timeout)
     return result_list
