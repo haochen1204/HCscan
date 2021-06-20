@@ -53,6 +53,7 @@ def main():
 
     # 读取命令行选项,若没有该选项则显示用法
     if not len(sys.argv[1:]):
+        head()
         help()
     
     # 读取用户输入的参数
