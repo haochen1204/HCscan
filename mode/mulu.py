@@ -46,8 +46,6 @@ def mulu_scan(url,thread,txt):
     # 获取当前的路径
     path=os.path.dirname(os.path.realpath(__file__))     
 
-    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+" 开始检查\n") 
-
     # 当前路径加上字典名就是绝对路径，然后循环字典里的payload
     for dir in open(path+"/"+txt):
             q.put(dir)
@@ -61,8 +59,7 @@ def mulu_scan(url,thread,txt):
     # 循环等待所有线程执行完毕，打印执行结果 
     while(True):
         if start_num == end_num :
-            print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束") 
             print("共扫描 ",list_num," 个目录")
             print("发现存在 ",alive_num," 个目录")
-            print("[GG]感谢使用HCscan！\n")
+            print("[GG]感谢使用HCscan！")
             break

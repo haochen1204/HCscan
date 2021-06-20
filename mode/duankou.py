@@ -4,7 +4,6 @@ import socket
 import threading
 
 result_list = list()
-scan_num = 0
 port_l = list()
 thread_num = 0
 
@@ -12,9 +11,9 @@ def port_scan(ip, port_list, thread, timeout):
     '''
     端口扫描核心代码
     '''
-    global scan_num
     global port_l
     global thread_num 
+    ip_num = 0
 
     if(port_list == 'all_port' or port_list == ''):
         port_list = list(range(1,65536))
@@ -27,6 +26,7 @@ def port_scan(ip, port_list, thread, timeout):
     net = ipaddress.ip_network(ip,False)
     for i in net:
         ip_addr = str(i)
+        ip_num+=1
         j=0
         port_l = port_list
         while(True):
@@ -36,32 +36,34 @@ def port_scan(ip, port_list, thread, timeout):
                 thread_num+=1
             if(len(port_l)==0):
                 break
-            
+    print("\n共扫描"+str(ip_num)+"个IP，"+str(port_num)+"个端口。")
+    print("发现 "+str(len(result_list))+" 个端口开放")
+    print("[GG]感谢使用HCscan！")
+    return result_list        
 
 def scan(ip,timeout):
     global result_list
     global port_l
-    global scan_num
     global thread_num
     OPEN_MSG = "% 6d [OPEN]"
 
     while(len(port_l)!=0):
         port = port_l[0]
-        port_l.remove(port)
+        try:
+            port_l.remove(port)
+        except:
+            e = IndexError
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.settimeout(timeout)
             result_code = s.connect_ex((ip, port)) #开放放回0
             if result_code == 0:
-                print(OPEN_MSG % port)
-                result_list.append(port)
+                print('[+] '+ip+'  '+ OPEN_MSG % port)
+                msg = ip+':'+str(port)
+                result_list.append(msg)
             else:
                 continue
-        except Exception as e:
-            print(e)
         finally:
             s.close()
-        scan_num+=1
         thread_num-=1
-
-    return result_list
+    

@@ -45,7 +45,6 @@ def ping_all(network):
     num = 0
     # 将输入的IP转换
     net = ipaddress.ip_network(network,False)
-    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+" 开始检查\n") 
     # 一个IP一个线程，并记录总共调用了多少个线程
     for i in net:
         add = str(i)                                        
@@ -55,9 +54,8 @@ def ping_all(network):
     # 死循环，等待所有线程结束后打印
     while(True):
         if(ip_num >= num):
-            print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束") 
             print("共扫描 ",ip_num," 个IP")
             print("存活 ",ip_alives," 个IP")
-            print("[GG]感谢使用HCscan！\n")
+            print("[GG]感谢使用HCscan！")
             break
  

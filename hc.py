@@ -3,6 +3,7 @@ import mode.cunhuo
 import mode.duankou
 import sys
 import getopt
+import time
 
 def head():
     print("")
@@ -97,6 +98,7 @@ def main():
     if len(use_port) == 0:
         use_port = 'often_port'
 
+    print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
     # 判断用户想启用什么功能，并调用对应函数
     if len(ip_net) and CH == True:          # 开启Ping主机存活功能扫描
         head()
@@ -107,6 +109,7 @@ def main():
     if PORT == True:
         head()
         mode.duankou.port_scan(ip_net,use_port,thread,3)
+    print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
 
 
 
