@@ -98,18 +98,23 @@ def main():
     if len(use_port) == 0:
         use_port = 'often_port'
 
-    print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
+    
     # 判断用户想启用什么功能，并调用对应函数
     if len(ip_net) and CH == True:          # 开启Ping主机存活功能扫描
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
         head()
         mode.cunhuo.ping_all(ip_net)
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
     if len(url) and ML == True:             # 使用目录扫描
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
         head()
         mode.mulu.mulu_scan(url,thread,txt)
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
     if PORT == True:
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
         head()
         mode.duankou.port_scan(ip_net,use_port,thread,3)
-    print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
 
 
 
