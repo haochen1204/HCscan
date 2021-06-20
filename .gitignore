@@ -1,1 +1,3 @@
 /mode/__pycache__
+/mode/__pycache__/*
+.gitignore
