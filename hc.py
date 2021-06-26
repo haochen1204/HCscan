@@ -1,3 +1,4 @@
+import mode.loudong
 import mode.mulu
 import mode.cunhuo
 import mode.duankou
@@ -38,6 +39,9 @@ def help():
     print("        -A --Alive                    - 使用Ping来探测主机是否存活")
     print("        -L --List                     - 扫描网站后台")
     print("        -P --Port                     - 扫描网站端口，可以用-p来进行指定，不指定默认为常用端口")
+    print("        -H --Hole                     - 扫描网站漏洞")
+    print("        -U --Utilize                  - 对网站漏洞利用")
+    print("        -S --Shell                    - 配套脚本接收shell用")
     print("           --AUTO                     - 根据输入的IP自动进行所有功能的监测")
     print("")
 
@@ -53,6 +57,8 @@ def main():
     txt = ""            # 字典的存放目录
     PORT = False        # 是否进行端口扫描
     use_port = ''       # 使用的端口
+    Hole = False        # 是否进行漏洞扫描
+    auto = 0            # 是否开启自动利用漏洞
 
     # 读取命令行选项,若没有该选项则显示用法
     if not len(sys.argv[1:]):
@@ -62,8 +68,9 @@ def main():
     # 读取用户输入的参数
     try:
         opts, args = getopt.getopt(sys.argv[1:], 
-        "hi:u:d:t:p:PAL",
-        ["help","ip=","url=","thread=","dictionary=","Alive","List","port=","Port","all_port","simple_port","often_port"])
+        "hi:u:d:t:p:PALH",
+        ["help","ip=","url=","thread=","dictionary=","Alive","List","port=","Port","all_port","simple_port",
+        "often_port","Hole","AUTO"])
     except getopt.GetoptError as err:
         print(str(err))
         head()
@@ -71,25 +78,29 @@ def main():
 
     # 从opts中读取数据，o为参数,a为参数后带的值
     for o,a in opts:
-        if o in ("-h","--help"):            # 如果参数为help，展示help界面
+        if o in ("-h","--help"):              # 如果参数为help，展示help界面
             head()
             help()
-        elif o in ("-i","--ip"):            # 如果参数为ip，将用户输入的ip赋值给ip_net
-            ip_net = a 
-        elif o in ("-A","--Alive"):          # 如果参数为P，开启ping功能的主机存活扫描功能
+        elif o in ("-i","--ip"):              # 如果参数为ip，将用户输入的ip赋值给ip_net
+            ip_net = a    
+        elif o in ("-A","--Alive"):           # 如果参数为P，开启ping功能的主机存活扫描功能
             CH = True
-        elif o in ("-t","--thread"):        # 如果参数为t，则将用户设置的线程数量赋值给thread
+        elif o in ("-t","--thread"):          # 如果参数为t，则将用户设置的线程数量赋值给thread
             thread = a
-        elif o in ("-u","--url"):           # 如果参数为url，将用户输入的url赋值给url
+        elif o in ("-u","--url"):             # 如果参数为url，将用户输入的url赋值给url
             url = a
-        elif o in ("-L","--List"):          # 如果参数为list，则开启目录扫描功能
+        elif o in ("-L","--List"):            # 如果参数为list，则开启目录扫描功能
             ML = True
-        elif o in ("-d","--dictionary"):    # 如果参数为dictionary，则将用户输入的目录赋值给txt
+        elif o in ("-d","--dictionary"):      # 如果参数为dictionary，则将用户输入的目录赋值给txt
             txt = a
-        elif o in ("-p","port"):            # 如果参数为p，则用户设置使用的端口
+        elif o in ("-p","--port"):            # 如果参数为p，则用户设置使用的端口
             use_port = a
-        elif o in ("-P","Port"):            # 如果参数为P，则用户想进行端口扫描
+        elif o in ("-P","--Port"):            # 如果参数为P，则用户想进行端口扫描
             PORT = True 
+        elif o in ("-H","--Hole"):            # 如果参数为H，则用户想进行漏洞扫描
+            Hole = True
+        elif o in ("--AUTO"):                 # 如果参数为AUTO,则对扫描到的漏洞自动进行利用 
+            auto = 1
     
     if thread == 0 :
         thread = 10000                  # 用户未设置线程则默认为 10000
@@ -114,6 +125,11 @@ def main():
         print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
         head()
         mode.duankou.port_scan(ip_net,use_port,thread,3)
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
+    if Hole == True:
+        print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
+        head()
+        mode.loudong.loudong_scan(url,auto)
         print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
 
 

@@ -1,5 +1,6 @@
 import os
 import queue
+from urllib.parse import urlparse
 import requests
 import time
 import threading
@@ -10,6 +11,14 @@ start_num = 0
 list_num = 0
 alive_num = 0
 
+headers = {
+    'Host':'',
+    'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2',
+    'Accept-Encoding': 'gzip, deflate'
+}
+
 def scan(url):
     '''
     目录扫描的函数
@@ -17,12 +26,15 @@ def scan(url):
     global end_num
     global list_num
     global alive_num
+    global headers
+    res=urlparse(url) 
+    headers['Host']=res.netloc
     while not q.empty():                        # 只要字典里不为空，就一直循环
         list_num+=1
         dir=q.get()                             # 把存储的payload取出来
         urls=url+dir                            # url+payload就是一个payload
         urls=urls.replace('\n','')              # 利用回车来分割开来，不然打印的时候不显示
-        code=requests.get(urls)                 # 把拼接的url发起http请求
+        code=requests.get(urls,headers)                 # 把拼接的url发起http请求
         if code.status_code==200 or code.status_code==403:              # 如果返回包状态码为200或者403，就打印url+状态码
             print('[+] '+urls+'           <'+str(code.status_code)+'>')
             f=open('ok.txt','a+')               # 打开文件
@@ -30,7 +42,7 @@ def scan(url):
             f.close()                           # 关闭文件
             alive_num+=1
         else:                                   # 不然就打印url+状态码，并延时一秒
-            print('[-] '+urls+code.raw._connection.sock.getsockname()    +'       <'+str(code.status_code)+'>')
+            # print('[-] '+urls+'       <'+str(code.status_code)+'>')
             time.sleep(1)  
     end_num+=1
  
