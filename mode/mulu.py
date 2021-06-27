@@ -37,9 +37,6 @@ def scan(url):
         code=requests.get(urls,headers)                 # 把拼接的url发起http请求
         if code.status_code==200 or code.status_code==403:              # 如果返回包状态码为200或者403，就打印url+状态码
             print('[+] '+urls+'           <'+str(code.status_code)+'>')
-            f=open('ok.txt','a+')               # 打开文件
-            f.write(urls)                       # 将url写入（追加的方式）
-            f.close()                           # 关闭文件
             alive_num+=1
         else:                                   # 不然就打印url+状态码，并延时一秒
             # print('[-] '+urls+'       <'+str(code.status_code)+'>')

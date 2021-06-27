@@ -86,7 +86,7 @@ def main():
         elif o in ("-A","--Alive"):           # 如果参数为P，开启ping功能的主机存活扫描功能
             CH = True
         elif o in ("-t","--thread"):          # 如果参数为t，则将用户设置的线程数量赋值给thread
-            thread = a
+            thread = int(a)
         elif o in ("-u","--url"):             # 如果参数为url，将用户输入的url赋值给url
             url = a
         elif o in ("-L","--List"):            # 如果参数为list，则开启目录扫描功能
@@ -103,7 +103,7 @@ def main():
             auto = 1
     
     if thread == 0 :
-        thread = 10000                  # 用户未设置线程则默认为 10000
+        thread = 100                    # 用户未设置线程则默认为 100
     if txt == "" :
         txt = "../mulu.txt"             # 用户未设置字典则使用默认字典
     if len(use_port) == 0:
