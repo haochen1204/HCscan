@@ -43,7 +43,7 @@ def help():
     print("        -H --Hole                     - 扫描网站漏洞")
     print("        -U --Utilize                  - 对网站漏洞利用")
     print("        -E --Export                   - 将扫描结果导出的excel文档中")
-    print("           --AUTO                     - 根据输入的IP自动进行所有功能的监测")
+    print("           --AUTO                     - 根据扫描到的漏洞自动进行利用")
     print("")
 
 def main():
