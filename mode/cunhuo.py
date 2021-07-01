@@ -17,7 +17,7 @@ ip_alives = 0
 ip_num = 0
 request_list = list()
 
-def ping_ip(ip):                                           
+def ping_ip(ip,timeout):                                           
     '''
     使用ping来判断主机是否存活
     '''
@@ -37,6 +37,7 @@ def ping_ip(ip):
             request_list.append(str(ip))
             break
     ip_num+=1
+    time.sleep(int(timeout))
     
 def write_in(net):
     global request_list
@@ -50,10 +51,10 @@ def write_in(net):
         msg=result_lists.pop()
         sheet.write(i,0,msg)
         i+=1
-    name = str(net) + '存活扫描.xls'
+    name = str(time.strftime("%Y%m%d %H-%M-%S", time.localtime()))+'存活扫描.xls'
     work_Book.save(name)
 
-def ping_all(network):                            
+def ping_all(network,timeout,export):                            
     '''
     从IP来获取所有主机
     '''
@@ -66,7 +67,7 @@ def ping_all(network):
     for i in net:
         add = str(i)                                        
         num+=1
-        t = threading.Thread(target=ping_ip,args=(add,))    # 创建多线程，使用ping_ip函数，传入ip作为参数
+        t = threading.Thread(target=ping_ip,args=(add,timeout))    # 创建多线程，使用ping_ip函数，传入ip作为参数
         t.start()
     # 死循环，等待所有线程结束后打印
     while(True):
@@ -74,6 +75,7 @@ def ping_all(network):
             print("共扫描 ",ip_num," 个IP")
             print("存活 ",ip_alives," 个IP")
             print("[GG]感谢使用HCscan！")
-            write_in(net)
+            if export == True:
+                write_in(net)
             break
  

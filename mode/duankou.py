@@ -3,12 +3,13 @@ import copy
 import socket
 import threading
 import xlwt
+import time
 
 result_list = list()
 port_l = list()
 thread_num = 0
 
-def port_scan(ip, port_list, thread, timeout):
+def port_scan(ip, port_list, thread, timeout, export):
     '''
     端口扫描核心代码
     '''
@@ -28,7 +29,6 @@ def port_scan(ip, port_list, thread, timeout):
     for i in net:
         ip_addr = str(i)
         ip_num+=1
-        j=0
         port_l = port_list
         while(True):
             if(thread_num < int(thread)):
@@ -40,7 +40,8 @@ def port_scan(ip, port_list, thread, timeout):
     print("\n共扫描"+str(ip_num)+"个IP，"+str(port_num)+"个端口。")
     print("发现 "+str(len(result_list))+" 个端口开放")
     print("[GG]感谢使用HCscan！")
-    write_in(ip)
+    if export == True:
+        write_in(ip)
     return result_list        
 
 def write_in(ip):
@@ -57,7 +58,7 @@ def write_in(ip):
         sheet.write(i,1,str(msglist.pop()))
         sheet.write(i,0,str(msglist.pop()))
         i+=1
-    name = str(ip) + '端口扫描.xls'
+    name = str(time.strftime("%Y%m%d %H-%M-%S", time.localtime())) + '端口扫描.xls'
     work_Book.save(name)
 
 def scan(ip,timeout):
@@ -74,7 +75,7 @@ def scan(ip,timeout):
             e = IndexError
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(timeout)
+            s.settimeout(int(timeout))
             result_code = s.connect_ex((ip, port)) #开放放回0
             if result_code == 0:
                 print('[+] '+ip+'  '+ OPEN_MSG % port)
