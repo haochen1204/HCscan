@@ -41,7 +41,6 @@ def help():
     print("        -L --List                     - 扫描网站后台")
     print("        -P --Port                     - 扫描网站端口，可以用-p来进行指定，不指定默认为常用端口")
     print("        -H --Hole                     - 扫描网站漏洞")
-    print("        -U --Utilize                  - 对网站漏洞利用")
     print("        -E --Export                   - 将扫描结果导出的excel文档中")
     print("           --AUTO                     - 根据扫描到的漏洞自动进行利用")
     print("")
