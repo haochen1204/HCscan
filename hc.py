@@ -59,7 +59,7 @@ def main():
     use_port = ''       # 使用的端口
     Hole = False        # 是否进行漏洞扫描
     auto = 0            # 是否开启自动利用漏洞
-    s = 3
+    s = 1
     export = False
 
     # 读取命令行选项,若没有该选项则显示用法
@@ -120,7 +120,7 @@ def main():
     if len(ip_net) and CH == True:          # 开启Ping主机存活功能扫描
         print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
         head()
-        mode.cunhuo.ping_all(ip_net,s,export)
+        mode.cunhuo.ping_all(ip_net,s,export,thread)
         print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 结束")
     if len(url) and ML == True:             # 使用目录扫描
         print(time.strftime("\n%Y-%m-%d %H:%M:%S", time.localtime())+" 开始")
